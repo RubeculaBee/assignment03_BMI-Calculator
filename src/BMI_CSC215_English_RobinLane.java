@@ -15,6 +15,19 @@
 
 public class BMI_CSC215_English_RobinLane
 {
+    static Scanner input = new Scanner(System.in);
+
+    /* Main method only calls each section method in this order:
+     *
+     * Welcome Message Method
+     * User Input Method One
+     * Initial Summary Method
+     * User Input Method Two
+     * Weight Range Method
+     * Goodbye Message Method
+     *
+     * This keeps the program simple and readable
+     */
     public static void main(String[] args)
     {
         displayWelcome();
