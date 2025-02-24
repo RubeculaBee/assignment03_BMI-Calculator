@@ -158,7 +158,7 @@ public class BMI_CSC215_English_RobinLane
 
         for(int i=0; i<weightList.size(); i++)
         {
-            if(weightList.get(i) == weightLb) //if the current weight is already in the lost, stop looping
+            if(weightList.get(i) == weightLb) //if the current weight is already in the list, stop looping
                 break;
 
             if(weightList.get(i) > weightLb) //if suddenly you skip past the current weight without finding it, add the current weight right before the one higher than it and stop looping
@@ -180,5 +180,24 @@ public class BMI_CSC215_English_RobinLane
             BMIList.add(getEngBMI(heightIn, weight));
 
         return BMIList;
+    }
+
+    //Takes in a Weight List and returns a list of Weight Statuses based on those weights.
+    static ArrayList<String> getWeightStatusList(ArrayList<Double> weightList)
+    {
+        //This method takes in a weight list instead of a BMI list so that when creating the weight status list the method knows which weight is the current weight
+        ArrayList<Double> BMIList = getEngBMIList(weightList); //generate a BMI List
+
+        ArrayList<String> weightStatusList = new ArrayList<String>();
+
+        for(int i=0; i<weightList.size(); i++)
+        {
+            if(weightList.get(i) == weightLb) //if the currently indexed weight is the same as the users current weight, append " (this)" to the weight status entry
+                weightStatusList.add(getWeightStatus(BMIList.get(i)) + " (this)");
+            else
+                weightStatusList.add(getWeightStatus(BMIList.get(i))); //if not, just append the weight status as normal
+        }
+
+        return weightStatusList;
     }
 }
