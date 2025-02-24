@@ -39,9 +39,9 @@ public class BMI_CSC215_English_RobinLane
     public static void main(String[] args)
     {
         displayWelcome();
-
+        System.out.print("\n");
         gatherPrimaryInput();
-
+        System.out.print("\n");
         displaySummary();
     }
 
@@ -79,6 +79,7 @@ public class BMI_CSC215_English_RobinLane
         System.out.printf("-- SUMMARY REPORT for %S\n", name);
         System.out.printf("-- Date and Time:      %s\n", getDateTime());
         System.out.printf("-- BMI:                %.6f (or %.1f if rounded)\n", BMI, BMI);
+        System.out.printf("-- Weight Status:      %s\n", getWeightStatus(BMI));
     }
 
     //Returns the current date and time formatted as desired
@@ -96,5 +97,22 @@ public class BMI_CSC215_English_RobinLane
     static double calculateEngBMI(int heightIn, double weightLb)
     {
         return (weightLb / (heightIn * heightIn)) * 703;
+    }
+
+    //Returns a weight category for a given BMI
+    static String getWeightStatus(double BMI)
+    {
+        String status;
+
+        if(BMI < 18.5)
+            status = "Underweight";
+        else if(BMI >= 18.5 && BMI < 25)
+            status = "Healthy Weight";
+        else if (BMI >= 25 && BMI < 30)
+            status = "Overweight";
+        else
+            status = "Obesity";
+
+        return status;
     }
 }
