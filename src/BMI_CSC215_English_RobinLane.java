@@ -14,6 +14,9 @@
 
 import java.util.Scanner;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 public class BMI_CSC215_English_RobinLane
 {
     static String name;
@@ -39,8 +42,11 @@ public class BMI_CSC215_English_RobinLane
         displayWelcome();
 
         gatherPrimaryInput();
+
+        displaySummary();
     }
 
+    //Prints desired welcome banner
     static void displayWelcome()
     {
         System.out.println("----------------------------------------------------------------------------------------------");
@@ -50,6 +56,7 @@ public class BMI_CSC215_English_RobinLane
         System.out.println("----------------------------------------------------------------------------------------------");
     }
 
+    //Gathers basic user information and stores in class variables
     static void gatherPrimaryInput()
     {
         System.out.print("Please enter your full name: ");
@@ -61,5 +68,24 @@ public class BMI_CSC215_English_RobinLane
 
         System.out.printf("Please enter weight in pounds for %s: ", name);
         weightLb = input.nextInt();
+    }
+
+
+    //Method split into three sub-methods. First returns the time, second calculates BMI, third returns weight status.
+    //Then this method prints all of that information
+    static void displaySummary()
+    {
+
+    }
+
+    //Returns the current date and time formatted as desired
+    static String getDateTime()
+    {
+        Date currentDateTime = new Date(); //Stores that current time
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy"); //Creates a Format Pattern for the date (month word) (single digit day) (comma) (4 digit year)
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm:ss a"); //Creates a Format Pattern for the time (single digit hours) (double digit minutes) (double digit seconds) (am/pm)
+
+        return dateFormat.format(currentDateTime) + " at " + timeFormat.format(currentDateTime); //returns date and time seperated by the word "at" as a string
     }
 }
