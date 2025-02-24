@@ -181,4 +181,20 @@ public class BMI_CSC215_English_RobinLane
 
         return BMIList;
     }
+
+    static ArrayList<String> getWeightStatusList(ArrayList<Double> weightList)
+    {
+        ArrayList<String> weightStatusList = new ArrayList<String>();
+        ArrayList<Double> BMIList = getEngBMIList(weightList);
+
+        for(int i=0; i<weightList.size(); i++)
+        {
+            if(weightList.get(i) == weightLb)
+                weightStatusList.add(getWeightStatus(BMIList.get(i)) + " (this)");
+            else
+                weightStatusList.add(getWeightStatus(BMIList.get(i)));
+        }
+
+        return weightStatusList;
+    }
 }
