@@ -17,6 +17,8 @@ import java.util.Scanner;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import java.util.ArrayList;
+
 public class BMI_CSC215_English_RobinLane
 {
     static String name;
@@ -51,6 +53,9 @@ public class BMI_CSC215_English_RobinLane
         System.out.print("\n");
 
         getSecondaryInput();
+        System.out.print("\n");
+
+        displayWeightList();
         System.out.print("\n");
     }
 
@@ -133,5 +138,35 @@ public class BMI_CSC215_English_RobinLane
 
         System.out.printf("Please enter a HIGH weight in pounds for %s: ", name);
         highWeightLb = input.nextDouble();
+    }
+
+    //Method Split into sub-methods. First generate a weight list.
+    static void displayWeightList()
+    {
+        ArrayList<Double> weightList = getWeightList(lowWeightLb, highWeightLb);
+    }
+
+    //Returns an ArrayList that is a range of weights between the given low and high weights, including the current weight.
+    static ArrayList<Double> getWeightList(double lowWeightLb, double highWeightLb)
+    {
+        ArrayList<Double> weightList = new ArrayList<Double>();
+
+        for(double i=lowWeightLb; i<highWeightLb; i+=5.5) //each entry in the list increments by 5.5, as shown in desired output
+            weightList.add(i);
+        weightList.add(highWeightLb); //loop always stops before the highWeight, so it is then added at the end. This accounts for if the high weight not being in the 5.5 step of the other weights
+
+        for(int i=0; i<weightList.size(); i++)
+        {
+            if(weightList.get(i) == weightLb) //if the current weight is already in the lost, stop looping
+                break;
+
+            if(weightList.get(i) > weightLb) //if suddenly you skip past the current weight without finding it, add the current weight right before the one higher than it and stop looping
+            {
+                weightList.add(i, weightLb);
+                break;
+            }
+        }
+
+        return weightList;
     }
 }
