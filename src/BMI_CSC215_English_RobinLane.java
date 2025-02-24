@@ -144,6 +144,7 @@ public class BMI_CSC215_English_RobinLane
     static void displayWeightList()
     {
         ArrayList<Double> weightList = getWeightList(lowWeightLb, highWeightLb);
+        ArrayList<Double> BMIList = getEngBMIList(weightList);
     }
 
     //Returns an ArrayList that is a range of weights between the given low and high weights, including the current weight.
@@ -168,5 +169,16 @@ public class BMI_CSC215_English_RobinLane
         }
 
         return weightList;
+    }
+
+    //Takes in an ArrayList of weights and returns an ArrayList of BMIs
+    static ArrayList<Double> getEngBMIList(ArrayList<Double> weightList)
+    {
+        ArrayList<Double> BMIList = new ArrayList<Double>();
+
+        for(double weight: weightList)
+            BMIList.add(getEngBMI(heightIn, weight));
+
+        return BMIList;
     }
 }
