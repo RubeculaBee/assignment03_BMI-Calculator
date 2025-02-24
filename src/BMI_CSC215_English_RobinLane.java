@@ -20,9 +20,8 @@ import java.text.SimpleDateFormat;
 public class BMI_CSC215_English_RobinLane
 {
     static String name;
-    static int heightFt;
     static int heightIn;
-    static int weightLb;
+    static double weightLb;
 
     static Scanner input = new Scanner(System.in);
 
@@ -63,11 +62,11 @@ public class BMI_CSC215_English_RobinLane
         name = input.nextLine();
 
         System.out.printf("Please enter height in feet and inches for %s: ", name);
-        heightFt = input.nextInt();
-        heightIn = input.nextInt();
+        heightIn += input.nextInt() * 12;
+        heightIn += input.nextInt();
 
         System.out.printf("Please enter weight in pounds for %s: ", name);
-        weightLb = input.nextInt();
+        weightLb = input.nextDouble();
     }
 
 
@@ -75,7 +74,11 @@ public class BMI_CSC215_English_RobinLane
     //Then this method prints all of that information
     static void displaySummary()
     {
+        double BMI = calculateEngBMI(heightIn, weightLb);
 
+        System.out.printf("-- SUMMARY REPORT for %S\n", name);
+        System.out.printf("-- Date and Time:      %s\n", getDateTime());
+        System.out.printf("-- BMI:                %.6f (or %.1f if rounded)\n", BMI, BMI);
     }
 
     //Returns the current date and time formatted as desired
@@ -87,5 +90,11 @@ public class BMI_CSC215_English_RobinLane
         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm:ss a"); //Creates a Format Pattern for the time (single digit hours) (double digit minutes) (double digit seconds) (am/pm)
 
         return dateFormat.format(currentDateTime) + " at " + timeFormat.format(currentDateTime); //returns date and time seperated by the word "at" as a string
+    }
+
+    //BMI calculation for imperial units (inches/pounds)
+    static double calculateEngBMI(int heightIn, double weightLb)
+    {
+        return (weightLb / (heightIn * heightIn)) * 703;
     }
 }
