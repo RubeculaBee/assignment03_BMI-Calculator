@@ -23,6 +23,9 @@ public class BMI_CSC215_English_RobinLane
     static int heightIn;
     static double weightLb;
 
+    static double lowWeightLb;
+    static double highWeightLb;
+
     static Scanner input = new Scanner(System.in);
 
     /* Main method only calls each section method in this order:
@@ -40,9 +43,15 @@ public class BMI_CSC215_English_RobinLane
     {
         displayWelcome();
         System.out.print("\n");
-        gatherPrimaryInput();
+
+        getPrimaryInput();
         System.out.print("\n");
+
         displaySummary();
+        System.out.print("\n");
+
+        getSecondaryInput();
+        System.out.print("\n");
     }
 
     //Prints desired welcome banner
@@ -56,13 +65,13 @@ public class BMI_CSC215_English_RobinLane
     }
 
     //Gathers basic user information and stores in class variables
-    static void gatherPrimaryInput()
+    static void getPrimaryInput()
     {
         System.out.print("Please enter your full name: ");
         name = input.nextLine();
 
         System.out.printf("Please enter height in feet and inches for %s: ", name);
-        heightIn += input.nextInt() * 12;
+        heightIn += input.nextInt() * 12; //height in feet is converted to inches
         heightIn += input.nextInt();
 
         System.out.printf("Please enter weight in pounds for %s: ", name);
@@ -74,7 +83,7 @@ public class BMI_CSC215_English_RobinLane
     //Then this method prints all of that information
     static void displaySummary()
     {
-        double BMI = calculateEngBMI(heightIn, weightLb);
+        double BMI = getEngBMI(heightIn, weightLb);
 
         System.out.printf("-- SUMMARY REPORT for %S\n", name);
         System.out.printf("-- Date and Time:      %s\n", getDateTime());
@@ -94,7 +103,7 @@ public class BMI_CSC215_English_RobinLane
     }
 
     //BMI calculation for imperial units (inches/pounds)
-    static double calculateEngBMI(int heightIn, double weightLb)
+    static double getEngBMI(int heightIn, double weightLb)
     {
         return (weightLb / (heightIn * heightIn)) * 703;
     }
@@ -114,5 +123,15 @@ public class BMI_CSC215_English_RobinLane
             status = "Obesity";
 
         return status;
+    }
+
+    //Gathers the users low weight and high weight
+    static void getSecondaryInput()
+    {
+        System.out.printf("Please enter a LOW weight in pounds for %s: ", name);
+        lowWeightLb = input.nextDouble();
+
+        System.out.printf("Please enter a HIGH weight in pounds for %s: ", name);
+        highWeightLb = input.nextDouble();
     }
 }
