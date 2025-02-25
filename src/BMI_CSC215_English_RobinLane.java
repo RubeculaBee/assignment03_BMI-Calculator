@@ -56,7 +56,9 @@ public class BMI_CSC215_English_RobinLane
         System.out.print("\n");
 
         displayWeightList();
-        System.out.print("\n");
+        System.out.print("\n\n");
+
+        displayGoodbye();
     }
 
     //Prints desired welcome banner
@@ -212,5 +214,15 @@ public class BMI_CSC215_English_RobinLane
         }
 
         return weightStatusList;
+    }
+
+    static void displayGoodbye()
+    {
+        System.out.print("The SFSU Mashouf Wellness Center is at 755 Font Blvd.\n\n");
+
+        System.out.print("----------------------------------------------------------------------------------------------\n");
+        System.out.printf("-- Thank you for using my program, %s!\n", name);
+        System.out.print("-- Goodbye!\n");
+        System.out.print("----------------------------------------------------------------------------------------------\n");
     }
 }
