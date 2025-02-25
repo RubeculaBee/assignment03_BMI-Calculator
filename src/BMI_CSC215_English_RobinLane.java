@@ -140,11 +140,24 @@ public class BMI_CSC215_English_RobinLane
         highWeightLb = input.nextDouble();
     }
 
-    //Method Split into sub-methods. First generate a weight list.
+    //Method Split into sub-methods. First generate a weight list, then BMI list, then weight status list, then display it all to the screen in the correct format
     static void displayWeightList()
     {
         ArrayList<Double> weightList = getWeightList(lowWeightLb, highWeightLb);
         ArrayList<Double> BMIList = getEngBMIList(weightList);
+        ArrayList<String> weightStatusList = getWeightStatusList(weightList);
+
+        System.out.print("-------------------------------------------------------\n");
+        System.out.printf("|  %-11s|  %-11s|  %-23s|\n", "WEIGHT", "BMI", "WEIGHT STATUS");
+        System.out.print(" ----------------------------------------------------- \n");
+
+        //The first and last members of the list are printed separately so as to include the "(LOW)" and "(HIGH)" tags
+        //The escape code \033[30;103m sets the background colour to bright yellow and the text colour to black
+        System.out.printf("|  %-11.2f|  %-11.5f|  %-16s\033[30;103m(LOW)\033[0m  |\n", weightList.getFirst(), BMIList.getFirst(), weightStatusList.getFirst());
+        for(int i = 1; i < weightList.size()-1; i++)
+            System.out.printf("|  %-11.2f|  %-11.5f|  %-23s|\n", weightList.get(i), BMIList.get(i), weightStatusList.get(i));
+        System.out.printf("|  %-11.2f|  %-11.5f|  %-15s\033[30;103m(HIGH)\033[0m  |\n", weightList.getLast(), BMIList.getLast(), weightStatusList.getLast());
+        System.out.print("-------------------------------------------------------\n");
     }
 
     //Returns an ArrayList that is a range of weights between the given low and high weights, including the current weight.
