@@ -2,7 +2,7 @@
  *
  * File: BMI_CSC215_English_RobinLane
  * By: Robin Lane
- * Date: 02-20-2025
+ * Date: 02-24-2025
  *
  * Description: A BMI Calculator. The program will ask for the users name, weight
  *              and height in imperial units, calculate their BMI, and then display
