@@ -1,9 +1,9 @@
 /*********************************************************************************
- *
+ * <p>
  * File: BMI_CSC215_English_RobinLane
  * By: Robin Lane
  * Date: 02-20-2025
- *
+ * <p>
  * Description: A BMI Calculator. The program will ask for the users name, weight
  *              and height in imperial units, calculate their BMI, and then display
  *              it. Then it will ask for their low weight and high weight, and
@@ -165,9 +165,9 @@ public class BMI_CSC215_English_RobinLane
     //Returns an ArrayList that is a range of weights between the given low and high weights, including the current weight.
     static ArrayList<Float> getWeightList(float lowWeightLb, float highWeightLb)
     {
-        ArrayList<Float> weightList = new ArrayList<Float>();
+        ArrayList<Float> weightList = new ArrayList<>();
 
-        for(float i=lowWeightLb; i<highWeightLb; i+=5.5) //each entry in the list increments by 5.5, as shown in desired output
+        for(float i=lowWeightLb; i<highWeightLb; i+=5.5f) //each entry in the list increments by 5.5, as shown in desired output
             weightList.add(i);
         weightList.add(highWeightLb); //loop always stops before the highWeight, so it is then added at the end. This accounts for if the high weight not being in the 5.5 step of the other weights
 
@@ -189,7 +189,7 @@ public class BMI_CSC215_English_RobinLane
     //Takes in an ArrayList of weights and returns an ArrayList of BMIs
     static ArrayList<Float> getEngBMIList(ArrayList<Float> weightList)
     {
-        ArrayList<Float> BMIList = new ArrayList<Float>();
+        ArrayList<Float> BMIList = new ArrayList<>();
 
         for(float weight: weightList)
             BMIList.add(getEngBMI(heightIn, weight));
@@ -203,7 +203,7 @@ public class BMI_CSC215_English_RobinLane
         //This method takes in a weight list instead of a BMI list so that when creating the weight status list the method knows which weight is the current weight
         ArrayList<Float> BMIList = getEngBMIList(weightList); //generate a BMI List
 
-        ArrayList<String> weightStatusList = new ArrayList<String>();
+        ArrayList<String> weightStatusList = new ArrayList<>();
 
         for(int i=0; i<weightList.size(); i++)
         {
