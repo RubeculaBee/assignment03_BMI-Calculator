@@ -23,10 +23,10 @@ public class BMI_CSC215_English_RobinLane
 {
     static String name;
     static int heightIn;
-    static double weightLb;
+    static float weightLb;
 
-    static double lowWeightLb;
-    static double highWeightLb;
+    static float lowWeightLb;
+    static float highWeightLb;
 
     static Scanner input = new Scanner(System.in);
 
@@ -82,7 +82,7 @@ public class BMI_CSC215_English_RobinLane
         heightIn += input.nextInt();
 
         System.out.printf("Please enter weight in pounds for %s: ", name);
-        weightLb = input.nextDouble();
+        weightLb = input.nextFloat();
     }
 
 
@@ -90,7 +90,7 @@ public class BMI_CSC215_English_RobinLane
     //Then this method prints all of that information
     static void displaySummary()
     {
-        double BMI = getEngBMI(heightIn, weightLb);
+        float BMI = getEngBMI(heightIn, weightLb);
 
         System.out.printf("-- SUMMARY REPORT for %S\n", name);
         System.out.printf("-- Date and Time:      %s\n", getDateTime());
@@ -104,19 +104,19 @@ public class BMI_CSC215_English_RobinLane
         Date currentDateTime = new Date(); //Stores that current time
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy"); //Creates a Format Pattern for the date (month word) (single digit day) (comma) (4 digit year)
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm:ss a"); //Creates a Format Pattern for the time (single digit hours) (double digit minutes) (double digit seconds) (am/pm)
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm:ss a"); //Creates a Format Pattern for the time (single digit hours) (float digit minutes) (float digit seconds) (am/pm)
 
         return dateFormat.format(currentDateTime) + " at " + timeFormat.format(currentDateTime); //returns date and time seperated by the word "at" as a string
     }
 
     //BMI calculation for imperial units (inches/pounds)
-    static double getEngBMI(int heightIn, double weightLb)
+    static float getEngBMI(int heightIn, float weightLb)
     {
         return (weightLb / (heightIn * heightIn)) * 703;
     }
 
     //Returns a weight category for a given BMI
-    static String getWeightStatus(double BMI)
+    static String getWeightStatus(float BMI)
     {
         String status;
 
@@ -136,17 +136,17 @@ public class BMI_CSC215_English_RobinLane
     static void getSecondaryInput()
     {
         System.out.printf("Please enter a LOW weight in pounds for %s: ", name);
-        lowWeightLb = input.nextDouble();
+        lowWeightLb = input.nextFloat();
 
         System.out.printf("Please enter a HIGH weight in pounds for %s: ", name);
-        highWeightLb = input.nextDouble();
+        highWeightLb = input.nextFloat();
     }
 
     //Method Split into sub-methods. First generate a weight list, then BMI list, then weight status list, then display it all to the screen in the correct format
     static void displayWeightList()
     {
-        ArrayList<Double> weightList = getWeightList(lowWeightLb, highWeightLb);
-        ArrayList<Double> BMIList = getEngBMIList(weightList);
+        ArrayList<Float> weightList = getWeightList(lowWeightLb, highWeightLb);
+        ArrayList<Float> BMIList = getEngBMIList(weightList);
         ArrayList<String> weightStatusList = getWeightStatusList(weightList);
 
         System.out.print("-------------------------------------------------------\n");
@@ -163,11 +163,11 @@ public class BMI_CSC215_English_RobinLane
     }
 
     //Returns an ArrayList that is a range of weights between the given low and high weights, including the current weight.
-    static ArrayList<Double> getWeightList(double lowWeightLb, double highWeightLb)
+    static ArrayList<Float> getWeightList(float lowWeightLb, float highWeightLb)
     {
-        ArrayList<Double> weightList = new ArrayList<Double>();
+        ArrayList<Float> weightList = new ArrayList<Float>();
 
-        for(double i=lowWeightLb; i<highWeightLb; i+=5.5) //each entry in the list increments by 5.5, as shown in desired output
+        for(float i=lowWeightLb; i<highWeightLb; i+=5.5) //each entry in the list increments by 5.5, as shown in desired output
             weightList.add(i);
         weightList.add(highWeightLb); //loop always stops before the highWeight, so it is then added at the end. This accounts for if the high weight not being in the 5.5 step of the other weights
 
@@ -187,21 +187,21 @@ public class BMI_CSC215_English_RobinLane
     }
 
     //Takes in an ArrayList of weights and returns an ArrayList of BMIs
-    static ArrayList<Double> getEngBMIList(ArrayList<Double> weightList)
+    static ArrayList<Float> getEngBMIList(ArrayList<Float> weightList)
     {
-        ArrayList<Double> BMIList = new ArrayList<Double>();
+        ArrayList<Float> BMIList = new ArrayList<Float>();
 
-        for(double weight: weightList)
+        for(float weight: weightList)
             BMIList.add(getEngBMI(heightIn, weight));
 
         return BMIList;
     }
 
     //Takes in a Weight List and returns a list of Weight Statuses based on those weights.
-    static ArrayList<String> getWeightStatusList(ArrayList<Double> weightList)
+    static ArrayList<String> getWeightStatusList(ArrayList<Float> weightList)
     {
         //This method takes in a weight list instead of a BMI list so that when creating the weight status list the method knows which weight is the current weight
-        ArrayList<Double> BMIList = getEngBMIList(weightList); //generate a BMI List
+        ArrayList<Float> BMIList = getEngBMIList(weightList); //generate a BMI List
 
         ArrayList<String> weightStatusList = new ArrayList<String>();
 
