@@ -5,7 +5,7 @@
  * Date: 02-27-2025
  * <p>
  * Description: A BMI Calculator. The program will ask for the users name, weight
- *              and height in imperial units, calculate their BMI, and then display
+ *              and height in metric units, calculate their BMI, and then display
  *              it. Then it will ask for their low weight and high weight, and
  *              display a range of weights they could have, as well as what
  *              their BMI would be at those weights.
@@ -20,11 +20,11 @@ import java.util.Scanner;
 public class BMI_CSC215_Metric_RobinLane
 {
     static String name;
-    static int heightIn;
-    static float weightLb;
+    static float heightM;
+    static float weightKg;
 
-    static float lowWeightLb;
-    static float highWeightLb;
+    static float lowWeightKg;
+    static float highWeightKg;
 
     static Scanner input = new Scanner(System.in);
 
@@ -64,8 +64,8 @@ public class BMI_CSC215_Metric_RobinLane
     {
         System.out.println("----------------------------------------------------------------------------------------------");
         System.out.println("-- Welcome to:");
-        System.out.println("--            BODY MASS INDEX (BMI) Computation, CSC 215, English version");
-        System.out.println("--                                                                   by Robin Lane");
+        System.out.println("--            BODY MASS INDEX (BMI) Computation, CSC 215, Metric version");
+        System.out.println("--                                                                  by Robin Lane");
         System.out.println("----------------------------------------------------------------------------------------------");
     }
 
@@ -75,12 +75,11 @@ public class BMI_CSC215_Metric_RobinLane
         System.out.print("Please enter your full name: ");
         name = input.nextLine();
 
-        System.out.printf("Please enter height in feet and inches for %s: ", name);
-        heightIn += input.nextInt() * 12; //height in feet is converted to inches
-        heightIn += input.nextInt();
+        System.out.printf("Please enter height in centimeters for %s: ", name);
+        heightM += input.nextFloat() / 100; //Calculations require the height to be in meters, so the user input of centimeters is converted into meters before storing
 
-        System.out.printf("Please enter weight in pounds for %s: ", name);
-        weightLb = input.nextFloat();
+        System.out.printf("Please enter weight in kilograms for %s: ", name);
+        weightKg = input.nextFloat();
     }
 
 
@@ -88,7 +87,7 @@ public class BMI_CSC215_Metric_RobinLane
     //Then this method prints all of that information
     static void displaySummary()
     {
-        float BMI = getEngBMI(heightIn, weightLb);
+        float BMI = getMetBMI(heightM, weightKg);
 
         System.out.printf("-- SUMMARY REPORT for %S\n", name);
         System.out.printf("-- Date and Time:      %s\n", getDateTime());
@@ -107,10 +106,10 @@ public class BMI_CSC215_Metric_RobinLane
         return dateFormat.format(currentDateTime) + " at " + timeFormat.format(currentDateTime); //returns date and time seperated by the word "at" as a string
     }
 
-    //BMI calculation for imperial units (inches/pounds)
-    static float getEngBMI(int heightIn, float weightLb)
+    //BMI calculation for metric units (centimeters/kilograms)
+    static float getMetBMI(float heightM, float weightKg)
     {
-        return (weightLb / (heightIn * heightIn)) * 703;
+        return weightKg / (heightM * heightM);
     }
 
     //Returns a weight category for a given BMI
@@ -133,18 +132,18 @@ public class BMI_CSC215_Metric_RobinLane
     //Gathers the users low weight and high weight
     static void getSecondaryInput()
     {
-        System.out.printf("Please enter a LOW weight in pounds for %s: ", name);
-        lowWeightLb = input.nextFloat();
+        System.out.printf("Please enter a LOW weight in kilograms for %s: ", name);
+        lowWeightKg = input.nextFloat();
 
-        System.out.printf("Please enter a HIGH weight in pounds for %s: ", name);
-        highWeightLb = input.nextFloat();
+        System.out.printf("Please enter a HIGH weight in kilograms for %s: ", name);
+        highWeightKg = input.nextFloat();
     }
 
     //Method Split into sub-methods. First generate a weight list, then BMI list, then weight status list, then display it all to the screen in the correct format
     static void displayWeightList()
     {
-        ArrayList<Float> weightList = getWeightList(lowWeightLb, highWeightLb);
-        ArrayList<Float> BMIList = getEngBMIList(weightList);
+        ArrayList<Float> weightList = getWeightList(lowWeightKg, highWeightKg);
+        ArrayList<Float> BMIList = getMetBMIList(weightList);
         ArrayList<String> weightStatusList = getWeightStatusList(weightList);
 
         System.out.print("-------------------------------------------------------\n");
@@ -175,22 +174,22 @@ public class BMI_CSC215_Metric_RobinLane
     }
 
     //Returns an ArrayList that is a range of weights between the given low and high weights, including the current weight.
-    static ArrayList<Float> getWeightList(float lowWeightLb, float highWeightLb)
+    static ArrayList<Float> getWeightList(float lowWeightKg, float highWeightKg)
     {
         ArrayList<Float> weightList = new ArrayList<>();
 
-        for(float i=lowWeightLb; i<highWeightLb; i+=5.5f) //each entry in the list increments by 5.5, as shown in desired output
+        for(float i=lowWeightKg; i<highWeightKg; i+=2.5f) //each entry in the list increments by 2.5, as shown in desired output
             weightList.add(i);
-        weightList.add(highWeightLb); //loop always stops before the highWeight, so it is then added at the end. This accounts for if the high weight not being in the 5.5 step of the other weights
+        weightList.add(highWeightKg); //loop always stops before the highWeight, so it is then added at the end. This accounts for if the high weight not being in the 5.5 step of the other weights
 
         for(int i=0; i<weightList.size(); i++)
         {
-            if(weightList.get(i) == weightLb) //if the current weight is already in the list, stop looping
+            if(weightList.get(i) == weightKg) //if the current weight is already in the list, stop looping
                 break;
 
-            if(weightList.get(i) > weightLb) //if suddenly you skip past the current weight without finding it, add the current weight right before the one higher than it and stop looping
+            if(weightList.get(i) > weightKg) //if suddenly you skip past the current weight without finding it, add the current weight right before the one higher than it and stop looping
             {
-                weightList.add(i, weightLb);
+                weightList.add(i, weightKg);
                 break;
             }
         }
@@ -199,12 +198,12 @@ public class BMI_CSC215_Metric_RobinLane
     }
 
     //Takes in an ArrayList of weights and returns an ArrayList of BMIs
-    static ArrayList<Float> getEngBMIList(ArrayList<Float> weightList)
+    static ArrayList<Float> getMetBMIList(ArrayList<Float> weightList)
     {
         ArrayList<Float> BMIList = new ArrayList<>();
 
         for(float weight: weightList)
-            BMIList.add(getEngBMI(heightIn, weight));
+            BMIList.add(getMetBMI(heightM, weight));
 
         return BMIList;
     }
@@ -213,13 +212,13 @@ public class BMI_CSC215_Metric_RobinLane
     static ArrayList<String> getWeightStatusList(ArrayList<Float> weightList)
     {
         //This method takes in a weight list instead of a BMI list so that when creating the weight status list the method knows which weight is the current weight
-        ArrayList<Float> BMIList = getEngBMIList(weightList); //generate a BMI List
+        ArrayList<Float> BMIList = getMetBMIList(weightList); //generate a BMI List
 
         ArrayList<String> weightStatusList = new ArrayList<>();
 
         for(int i=0; i<weightList.size(); i++)
         {
-            if(weightList.get(i) == weightLb) //if the currently indexed weight is the same as the users current weight, append " (this)" to the weight status entry
+            if(weightList.get(i) == weightKg) //if the currently indexed weight is the same as the users current weight, append " (this)" to the weight status entry
                 weightStatusList.add(getWeightStatus(BMIList.get(i)) + " (this)");
             else
                 weightStatusList.add(getWeightStatus(BMIList.get(i))); //if not, just append the weight status as normal
