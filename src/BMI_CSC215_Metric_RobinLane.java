@@ -75,11 +75,41 @@ public class BMI_CSC215_Metric_RobinLane
         System.out.print("Please enter your full name: ");
         name = input.nextLine();
 
-        System.out.printf("Please enter height in centimeters for %s: ", name);
-        heightM += input.nextFloat() / 100; //Calculations require the height to be in meters, so the user input of centimeters is converted into meters before storing
+        // Calculations must be done in meters, but input must be done in centimeters, so the input is divided by 100 to convert to meters
+        /* Desired input wants height to be inputted as an integer, but in order to convert to meters it must be a float.
+           That is why the safeInput method calls for an integer input but the output is instead converted to a float */
+        heightM = Float.parseFloat(safeInput("Please enter height in centimeters for %s: ", "int")) / 100;
 
-        System.out.printf("Please enter weight in kilograms for %s: ", name);
-        weightKg = input.nextFloat();
+        weightKg = Float.parseFloat(safeInput("Please enter weight in kilograms for %s: ", "float"));
+    }
+
+    /* Prompts the user with the given prompt, and then waits for the user to input the specified type.
+       If the user inputs the wrong type, they are informed as such and re-prompted.
+       Always returns the input as a string, so the value must then be converted to the proper type.*/
+    static String safeInput(String prompt, String type)
+    {
+        while(true)
+        {
+            System.out.printf(prompt, name); //print statement always attempts to insert the user's name into a format string
+
+            if(switch(type){
+                case "int" -> input.hasNextInt(); //checks if the input has the type specified in the arguments
+                case "float" -> input.hasNextFloat(); //Only int and float are checkable, as that is all this program needs
+                default -> true;}) //if the given type is not accepted, immediately proceeds into the body of the if statement
+            {
+                return String.valueOf(switch(type)
+                {
+                    case "int" -> input.nextInt(); //returns the specified type from the input stream
+                    case "float" -> input.nextFloat();
+                    default -> "Invalid Type"; //if the given type is not accepted, return "Invalid Type"
+                });
+            }
+            else
+            {
+                System.out.printf("You must enter %s %s\n", type.equals("int") ? "an" : "a", type);
+                input.next(); // clear input stream
+            }
+        }
     }
 
 
@@ -132,11 +162,9 @@ public class BMI_CSC215_Metric_RobinLane
     //Gathers the users low weight and high weight
     static void getSecondaryInput()
     {
-        System.out.printf("Please enter a LOW weight in kilograms for %s: ", name);
-        lowWeightKg = input.nextFloat();
+        lowWeightKg = Float.parseFloat(safeInput("Please enter a LOW weight in kilograms for %s: ", "float"));
 
-        System.out.printf("Please enter a HIGH weight in kilograms for %s: ", name);
-        highWeightKg = input.nextFloat();
+        highWeightKg = Float.parseFloat(safeInput("Please enter a HIGH weight in kilograms for %s: ", "float"));
     }
 
     //Method Split into sub-methods. First generate a weight list, then BMI list, then weight status list, then display it all to the screen in the correct format
