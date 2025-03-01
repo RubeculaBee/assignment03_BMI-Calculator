@@ -32,7 +32,77 @@ public class BMI_Master_RobinLane
 
     static Scanner input = new Scanner(System.in);
 
-    /* Main method only calls each section method in this order:
+    //calls a single method, the choice menu
+    public static void main(String[] args)
+    {
+        displayChoiceMenu();
+    }
+
+    //Gives the user the user manual, and then asks them to make a choice. quits the program on "!", invalid choices cause a reprompt
+    static void displayChoiceMenu()
+    {
+        while(true)
+        {
+            System.out.println("My CSC 215 BMI Calculator Projects:");
+            System.out.println("   1. BMI, English");
+            System.out.println("   2. BMI, Metric");
+            System.out.println("\n[ USER MANUAL ] Enter an exclamation mark ! to end.");
+
+            String choice;
+            do
+            {
+                System.out.print("Please enter the version you want to try: ");
+                choice = getChoice();
+
+                switch (choice)
+                {
+                    case "!" -> {return;}
+                    case "english" -> isMetricVersion = false;
+                    case "metric" -> isMetricVersion = true;
+                    default -> System.out.println("Invalid choice. Try again.");
+                }
+            }
+            while (choice.equals("Invalid"));
+
+            System.out.print("\n");
+            runCalculator();
+        }
+    }
+
+    //gets input from the user. If the input is !, immediately exits. Otherwise matches the input to certain regexes to remove duplicate letters.
+    static String getChoice()
+    {
+        String choice = input.nextLine();
+
+        if(choice.equals("!")) return choice;
+
+        choice = normalizeString(choice);
+
+        if(choice.matches("^e+n+g+l+i+s+h+$")) //matches any string that starts with any number of 'e's, then 'n's, then 'g's, 'l's, 'i's, 's's, 'h's, then the string ends
+            return "english";
+        else if(choice.matches("^m+e+t+r+i+c+$")) //matches any string that starts with any number of 'm's, then 'e's, then 't's, 'r's, 'i's, 'c's, then the string ends
+            return "metric";
+        else return "Invalid";
+
+        //are ya' happy? you made me learn regexes >:/
+    }
+
+    // Takes a string and returns it in all lowercase and with any characters that aren't english letters removed
+    static String normalizeString(String str)
+    {
+        str = str.toLowerCase();
+        String normalString ="";
+
+        for(char c : str.toCharArray())
+        {
+            if(c >= 'a' && c <= 'z')
+               normalString = normalString.concat(String.valueOf(c));
+        }
+
+        return normalString;
+    }
+
+    /* Method only calls each section method in this order:
      *
      * Welcome Message Method
      * User Input Method One
@@ -40,13 +110,9 @@ public class BMI_Master_RobinLane
      * User Input Method Two
      * Weight Range Method
      * Goodbye Message Method
-     *
-     * This keeps the program simple and readable
      */
-    public static void main(String[] args)
+    static void runCalculator()
     {
-        isMetricVersion = false;
-
         displayWelcome();
         System.out.print("\n");
 
@@ -63,6 +129,9 @@ public class BMI_Master_RobinLane
         System.out.print("\n\n");
 
         displayGoodbye();
+        System.out.print("\n");
+
+        input.nextLine(); //clears input stream for next run.
     }
 
     //Prints desired welcome banner
@@ -91,7 +160,7 @@ public class BMI_Master_RobinLane
             height = Float.parseFloat(safeInput("int")) / 100;
         else
         {
-            height += Float.parseFloat(safeInput("int")) * 12; //height in feet is converted to inches
+            height = 0 + Float.parseFloat(safeInput("int")) * 12; //height in feet is converted to inches. Height is Zeroed in case of previous input.
             height += Float.parseFloat(safeInput("int"));
         }
 
