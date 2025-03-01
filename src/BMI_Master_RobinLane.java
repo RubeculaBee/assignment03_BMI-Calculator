@@ -1,14 +1,16 @@
 /*********************************************************************************
  * <p>
- * File: BMI_CSC215_Metric_RobinLane
+ * File: BMI_Master_RobinLane
  * By: Robin Lane
- * Date: 02-27-2025
+ * Date: 02-28-2025
  * <p>
- * Description: A BMI Calculator. The program will ask for the users name, weight
- *              and height in metric units, calculate their BMI, and then display
- *              it. Then it will ask for their low weight and high weight, and
- *              display a range of weights they could have, as well as what
- *              their BMI would be at those weights.
+ * Description: A BMI Calculator. The Program will ask which version the user
+ *              wants to use. Then it will run the corresponding version
+ *              The program will ask for the users name, weight
+ *              and height in metric or imperial units, calculate their BMI, and
+ *              then display it. Then it will ask for their low weight and high
+ *              weight, and display a range of weights they could have, as well
+ *              as what their BMI would be at those weights.
  *
  *********************************************************************************/
 
@@ -17,18 +19,90 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-public class BMI_CSC215_Metric_RobinLane
+public class BMI_Master_RobinLane
 {
     static String name;
-    static float heightM;
-    static float weightKg;
+    static float height;
+    static float weight;
 
-    static float lowWeightKg;
-    static float highWeightKg;
+    static float lowWeight;
+    static float highWeight;
+
+    static boolean isMetricVersion;
 
     static Scanner input = new Scanner(System.in);
 
-    /* Main method only calls each section method in this order:
+    //calls a single method, the choice menu
+    public static void main(String[] args)
+    {
+        displayChoiceMenu();
+    }
+
+    //Gives the user the user manual, and then asks them to make a choice. quits the program on "!", invalid choices cause a reprompt
+    static void displayChoiceMenu()
+    {
+        while(true)
+        {
+            System.out.println("My CSC 215 BMI Calculator Projects:");
+            System.out.println("   1. BMI, English");
+            System.out.println("   2. BMI, Metric");
+            System.out.println("\n[ USER MANUAL ] Enter an exclamation mark ! to end.");
+
+            String choice;
+            do
+            {
+                System.out.print("Please enter the version you want to try: ");
+                choice = getChoice();
+
+                switch (choice)
+                {
+                    case "!" -> {return;}
+                    case "english" -> isMetricVersion = false;
+                    case "metric" -> isMetricVersion = true;
+                    default -> System.out.println("Invalid choice. Try again.");
+                }
+            }
+            while (choice.equals("Invalid"));
+
+            System.out.print("\n");
+            runCalculator();
+        }
+    }
+
+    //gets input from the user. If the input is !, immediately exits. Otherwise matches the input to certain regexes to remove duplicate letters.
+    static String getChoice()
+    {
+        String choice = input.nextLine();
+
+        if(choice.equals("!")) return choice;
+
+        choice = normalizeString(choice);
+
+        if(choice.matches("^e+n+g+l+i+s+h+$")) //matches any string that starts with any number of 'e's, then 'n's, then 'g's, 'l's, 'i's, 's's, 'h's, then the string ends
+            return "english";
+        else if(choice.matches("^m+e+t+r+i+c+$")) //matches any string that starts with any number of 'm's, then 'e's, then 't's, 'r's, 'i's, 'c's, then the string ends
+            return "metric";
+        else return "Invalid";
+
+        //are ya' happy? you made me learn regexes >:/
+    }
+
+    // Takes a string and returns it in all lowercase and with any characters that aren't english letters removed
+    static String normalizeString(String str)
+    {
+        str = str.toLowerCase();
+        String normalString ="";
+
+        for(char c : str.toCharArray())
+        {
+            if(c >= 'a' && c <= 'z')
+               normalString = normalString.concat(String.valueOf(c));
+        }
+
+        return normalString;
+    }
+
+    /* Method only calls each section method in this order:
      *
      * Welcome Message Method
      * User Input Method One
@@ -36,10 +110,8 @@ public class BMI_CSC215_Metric_RobinLane
      * User Input Method Two
      * Weight Range Method
      * Goodbye Message Method
-     *
-     * This keeps the program simple and readable
      */
-    public static void main(String[] args)
+    static void runCalculator()
     {
         displayWelcome();
         System.out.print("\n");
@@ -57,15 +129,19 @@ public class BMI_CSC215_Metric_RobinLane
         System.out.print("\n\n");
 
         displayGoodbye();
+        System.out.print("\n");
+
+        input.nextLine(); //clears input stream for next run.
     }
 
     //Prints desired welcome banner
     static void displayWelcome()
     {
+        //first letter of the name must line up with the 'n' in the word version. Because the word english
         System.out.println("----------------------------------------------------------------------------------------------");
         System.out.println("-- Welcome to:");
-        System.out.println("--            BODY MASS INDEX (BMI) Computation, CSC 215, Metric version");
-        System.out.println("--                                                                  by Robin Lane");
+        System.out.printf("--            BODY MASS INDEX (BMI) Computation, CSC 215, %s version\n", isMetricVersion ? "Metric" : "English");
+        System.out.printf("--                                                                  %sby Robin Lane\n", isMetricVersion ? "" : " ");
         System.out.println("----------------------------------------------------------------------------------------------");
     }
 
@@ -75,23 +151,30 @@ public class BMI_CSC215_Metric_RobinLane
         System.out.print("Please enter your full name: ");
         name = input.nextLine();
 
+        System.out.printf("Please enter height in %s for %s: ", isMetricVersion? "centimeters" : "feet and inches", name);
+
         // Calculations must be done in meters, but input must be done in centimeters, so the input is divided by 100 to convert to meters
         /* Desired input wants height to be inputted as an integer, but in order to convert to meters it must be a float.
            That is why the safeInput method calls for an integer input but the output is instead converted to a float */
-        heightM = Float.parseFloat(safeInput("Please enter height in centimeters for %s: ", "int")) / 100;
+        if(isMetricVersion)
+            height = Float.parseFloat(safeInput("int")) / 100;
+        else
+        {
+            height = 0 + Float.parseFloat(safeInput("int")) * 12; //height in feet is converted to inches. Height is Zeroed in case of previous input.
+            height += Float.parseFloat(safeInput("int"));
+        }
 
-        weightKg = Float.parseFloat(safeInput("Please enter weight in kilograms for %s: ", "float"));
+        System.out.printf("Please enter weight in %s for %s: ", isMetricVersion? "kilograms" : "pounds", name);
+        weight = Float.parseFloat(safeInput("float"));
     }
 
-    /* Prompts the user with the given prompt, and then waits for the user to input the specified type.
+    /* Waits for the user to input the specified type.
        If the user inputs the wrong type, they are informed as such and re-prompted.
        Always returns the input as a string, so the value must then be converted to the proper type.*/
-    static String safeInput(String prompt, String type)
+    static String safeInput(String type)
     {
         while(true)
         {
-            System.out.printf(prompt, name); //print statement always attempts to insert the user's name into a format string
-
             if(switch(type){
                 case "int" -> input.hasNextInt(); //checks if the input has the type specified in the arguments
                 case "float" -> input.hasNextFloat(); //Only int and float are checkable, as that is all this program needs
@@ -117,7 +200,7 @@ public class BMI_CSC215_Metric_RobinLane
     //Then this method prints all of that information
     static void displaySummary()
     {
-        float BMI = getMetBMI(heightM, weightKg);
+        float BMI = isMetricVersion? getMetBMI(height, weight) : getEngBMI(height, weight);
 
         System.out.printf("-- SUMMARY REPORT for %S\n", name);
         System.out.printf("-- Date and Time:      %s\n", getDateTime());
@@ -134,6 +217,12 @@ public class BMI_CSC215_Metric_RobinLane
         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm:ss a"); //Creates a Format Pattern for the time (single digit hours) (float digit minutes) (float digit seconds) (am/pm)
 
         return dateFormat.format(currentDateTime) + " at " + timeFormat.format(currentDateTime); //returns date and time seperated by the word "at" as a string
+    }
+
+    //BMI calculation for imperial units (inches/pounds)
+    static float getEngBMI(float heightIn, float weightLb)
+    {
+        return (weightLb / (heightIn * heightIn)) * 703;
     }
 
     //BMI calculation for metric units (centimeters/kilograms)
@@ -162,15 +251,17 @@ public class BMI_CSC215_Metric_RobinLane
     //Gathers the users low weight and high weight
     static void getSecondaryInput()
     {
-        lowWeightKg = Float.parseFloat(safeInput("Please enter a LOW weight in kilograms for %s: ", "float"));
+        System.out.printf("Please enter a LOW weight in %s for %s: ", isMetricVersion? "kilograms" : "pounds", name);
+        lowWeight = Float.parseFloat(safeInput("float"));
 
-        highWeightKg = Float.parseFloat(safeInput("Please enter a HIGH weight in kilograms for %s: ", "float"));
+        System.out.printf("Please enter a HIGH weight in %s for %s: ", isMetricVersion? "kilograms" : "pounds", name);
+        highWeight = Float.parseFloat(safeInput("float"));
     }
 
     //Method Split into sub-methods. First generate a weight list, then BMI list, then weight status list, then display it all to the screen in the correct format
     static void displayWeightList()
     {
-        ArrayList<Float> weightList = getWeightList(lowWeightKg, highWeightKg);
+        ArrayList<Float> weightList = getWeightList(lowWeight, highWeight);
         ArrayList<Float> BMIList = getMetBMIList(weightList);
         ArrayList<String> weightStatusList = getWeightStatusList(weightList);
 
@@ -202,22 +293,22 @@ public class BMI_CSC215_Metric_RobinLane
     }
 
     //Returns an ArrayList that is a range of weights between the given low and high weights, including the current weight.
-    static ArrayList<Float> getWeightList(float lowWeightKg, float highWeightKg)
+    static ArrayList<Float> getWeightList(float lowWeight, float highWeight)
     {
         ArrayList<Float> weightList = new ArrayList<>();
 
-        for(float i=lowWeightKg; i<highWeightKg; i+=2.5f) //each entry in the list increments by 2.5, as shown in desired output
+        for(float i=lowWeight; i<highWeight; i+= isMetricVersion? 2.5f : 5.5f) //each entry in the list increments by 2.5 if metric or 5.5 if imperial, as shown in desired output
             weightList.add(i);
-        weightList.add(highWeightKg); //loop always stops before the highWeight, so it is then added at the end. This accounts for if the high weight not being in the 5.5 step of the other weights
+        weightList.add(highWeight); //loop always stops before the highWeight, so it is then added at the end. This accounts for if the high weight not being in the 5.5 step of the other weights
 
         for(int i=0; i<weightList.size(); i++)
         {
-            if(weightList.get(i) == weightKg) //if the current weight is already in the list, stop looping
+            if(weightList.get(i) == weight) //if the current weight is already in the list, stop looping
                 break;
 
-            if(weightList.get(i) > weightKg) //if suddenly you skip past the current weight without finding it, add the current weight right before the one higher than it and stop looping
+            if(weightList.get(i) > weight) //if suddenly you skip past the current weight without finding it, add the current weight right before the one higher than it and stop looping
             {
-                weightList.add(i, weightKg);
+                weightList.add(i, weight);
                 break;
             }
         }
@@ -231,7 +322,7 @@ public class BMI_CSC215_Metric_RobinLane
         ArrayList<Float> BMIList = new ArrayList<>();
 
         for(float weight: weightList)
-            BMIList.add(getMetBMI(heightM, weight));
+            BMIList.add(isMetricVersion? getMetBMI(height, weight) : getEngBMI(height, weight));
 
         return BMIList;
     }
@@ -246,7 +337,7 @@ public class BMI_CSC215_Metric_RobinLane
 
         for(int i=0; i<weightList.size(); i++)
         {
-            if(weightList.get(i) == weightKg) //if the currently indexed weight is the same as the users current weight, append " (this)" to the weight status entry
+            if(weightList.get(i) == weight) //if the currently indexed weight is the same as the users current weight, append " (this)" to the weight status entry
                 weightStatusList.add(getWeightStatus(BMIList.get(i)) + " (this)");
             else
                 weightStatusList.add(getWeightStatus(BMIList.get(i))); //if not, just append the weight status as normal
