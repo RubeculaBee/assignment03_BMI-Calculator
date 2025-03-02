@@ -262,7 +262,7 @@ public class BMI_Master_RobinLane
     static void displayWeightList()
     {
         ArrayList<Float> weightList = getWeightList(lowWeight, highWeight);
-        ArrayList<Float> BMIList = getMetBMIList(weightList);
+        ArrayList<Float> BMIList = getBMIList(weightList);
         ArrayList<String> weightStatusList = getWeightStatusList(weightList);
 
         System.out.print("-------------------------------------------------------\n");
@@ -317,7 +317,7 @@ public class BMI_Master_RobinLane
     }
 
     //Takes in an ArrayList of weights and returns an ArrayList of BMIs
-    static ArrayList<Float> getMetBMIList(ArrayList<Float> weightList)
+    static ArrayList<Float> getBMIList(ArrayList<Float> weightList)
     {
         ArrayList<Float> BMIList = new ArrayList<>();
 
@@ -331,7 +331,7 @@ public class BMI_Master_RobinLane
     static ArrayList<String> getWeightStatusList(ArrayList<Float> weightList)
     {
         //This method takes in a weight list instead of a BMI list so that when creating the weight status list the method knows which weight is the current weight
-        ArrayList<Float> BMIList = getMetBMIList(weightList); //generate a BMI List
+        ArrayList<Float> BMIList = getBMIList(weightList); //generate a BMI List
 
         ArrayList<String> weightStatusList = new ArrayList<>();
 
